@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Registration Form PP-02</title>
   <style>
     body {
@@ -14,97 +14,109 @@
     header img {
       max-width: 100%;
     }
-    input[type="text"] {
-      padding: 10px;
-      width: 300px;
-      font-size: 16px;
-      text-transform: uppercase;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-      background-color: #007acc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
     #result {
-      display: none;
       margin-top: 20px;
       background: white;
       padding: 20px;
       border-radius: 8px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: left;
+      display: none;
     }
-    .label {
-      font-weight: bold;
+    .label { font-weight: bold; }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      text-transform: uppercase;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://i.postimg.cc/vHvCqdhG/header.jpg" alt="Page Header Image" />
+    <img src="https://i.postimg.cc/vHvCqdhG/header.jpg" alt="Header Image" />
     <h1>Welcome to Student Registration Portal</h1>
   </header>
 
   <h2>Search Your Registration Details (PP-02)</h2>
-  <input type="text" id="searchInput" placeholder="Enter Name or Roll No">
+  <input type="text" id="searchInput" placeholder="Enter Roll No" />
   <button onclick="searchData()">Search</button>
-  <button onclick="window.location.href='index.html'">Back to Home</button>
 
   <div id="result"></div>
 
   <script>
     async function searchData() {
-      const query = document.getElementById('searchInput').value.trim().toUpperCase();
-      if (!query) return alert("Please enter a Name or Roll No.");
+      const query = document.getElementById("searchInput").value.trim().toUpperCase();
+      if (!query) return alert("Please enter a Roll No.");
 
-      const url = `https://script.google.com/macros/s/AKfycbx0D6F6-ePqT-_W7EYrZC_qx_VO3JLkfeTQk_qrPRoPvCTx-DHyMa0b2QmKGIgOJr_H9g/exec?query=${encodeURIComponent(query)}`;
+      const url = "https://script.google.com/macros/s/AKfycbzXqBMSjaxVSetyDqjCUCKq_v7upYAUU-4xVDR944Qlv5tEti7o8tlQw5DG-LQAs7j3/exec?query=" + encodeURIComponent(query);
+
       try {
         const res = await fetch(url);
         const data = await res.json();
-
-        if (!data || data.length === 0) return alert("No record found.");
-
         const record = data[0];
+        if (!record) return alert("No matching record found.");
+
+        const dob = new Date(record["DATE OF BIRTH"]);
+        const dobDay = dob.getDate();
+        const dobMonth = dob.getMonth() + 1;
+        const dobYear = dob.getFullYear();
+
+        const prefillURL = "https://docs.google.com/forms/d/1jcCw4-TKI-RSAs8mSqVk6jxoPY3hTyBI7Pb0OKpSPWk/viewform?usp=pp_url" +
+          `&entry.916188020=${encodeURIComponent(record["REGISTRATION NO"] || "")}` +
+          `&entry.1318237488=${encodeURIComponent(record["ROLL NO"] || "")}` +
+          `&entry.1970136733=${encodeURIComponent(record["APPLICANT NAME"] || "")}` +
+          `&entry.1915382959_day=${dobDay}` +
+          `&entry.1915382959_month=${dobMonth}` +
+          `&entry.1915382959_year=${dobYear}` +
+          `&entry.230391067=${encodeURIComponent(record["GUARDIAN NAME"] || "")}` +
+          `&entry.2141508289=${encodeURIComponent(record["RELATION"] || "")}` +
+          `&entry.91311027=${encodeURIComponent(record["CONTACT NO"] || "")}` +
+          `&entry.949717326=${encodeURIComponent(record["SUBJECT"] || "")}` +
+          `&entry.197254026=${encodeURIComponent(record["CENTRE NAME"] || "")}` +
+          `&entry.312317850=${encodeURIComponent(record["CENTRE CODE"] || "")}` +
+          `&entry.1273939207=${encodeURIComponent(record["CENTRE ADDRESS"] || "")}` +
+          `&entry.1273939207=${encodeURIComponent(record["CANDIDATE PASSPORT PHOTO"] || "")}` +
+          `&entry.1273939207=${encodeURIComponent(record["CANDIDATE BIRTH DOCUMENTS"] || "")}`;
+
+        let modifySection = "";
         if ((record["STATUS"] || "").toUpperCase() === "MODIFIED") {
-          alert("You have already modified your registration once.");
-          return;
+          modifySection = `<p style="color:red;"><b>You have already modified your registration once.</b></p>`;
+        } else {
+          modifySection = `<button onclick="window.location.href='${prefillURL}'">Modify My Details</button>`;
         }
-
-        const dobParts = (record["DATE OF BIRTH"] || '').split("/");
-        const [month, day, year] = dobParts;
-
-        const params = new URLSearchParams({
-          "entry.916188020": record["REGISTRATION NO"],
-          "entry.1318237488": record["ROLL NO"],
-          "entry.1970136733": record["APPLICANT NAME"],
-          "entry.1915382959_month": month,
-	  "entry.1915382959_day": day,
-          "entry.1915382959_year": year,
-          "entry.230391067": record["GUARDIAN NAME"],
-          "entry.2141508289": record["RELATION"],
-          "entry.91311027": record["CONTACT NO"],
-          "entry.949717326": record["SUBJECT"],
-          "entry.197254026": record["CENTRE NAME"],
-          "entry.312317850": record["CENTRE CODE"],
-          "entry.1273939207": record["CENTRE ADDRESS"]
-        });
-
-        const formURL = `https://docs.google.com/forms/d/e/1FAIpQLSfjghQImZGdJG4y6eskIVJt60aoGhGyGkVIQijmOCsNeFpPDw/viewform?usp=pp_url&${params.toString()}`;
 
         document.getElementById("result").style.display = "block";
         document.getElementById("result").innerHTML = `
-          <p><span class="label">Name:</span> ${record["APPLICANT NAME"]}</p>
-          <p><span class="label">Roll No:</span> ${record["ROLL NO"]}</p>
-          <p><span class="label">Registration No:</span> ${record["REGISTRATION NO"]}</p>
-          <button onclick="window.location.href='${formURL}'">Modify My Details</button>
+          <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
+          <p><span class="label">Roll No:</span> ${record["ROLL NO"] || "N/A"}</p>
+          <p><span class="label">Registration No:</span> ${record["REGISTRATION NO"] || "N/A"}</p>
+          <p><span class="label">DOB:</span> ${dobDay}/${dobMonth}/${dobYear}</p>
+          <p><span class="label">Guardian Name:</span> ${record["GUARDIAN NAME"] || "N/A"}</p>
+          <p><span class="label">Relation:</span> ${record["RELATION"] || 'N/A'}</p>
+          <p><span class="label">Contact No:</span> ${record["CONTACT NO"] || 'N/A'}</p>
+          <p><span class="label">Subject:</span> ${record["SUBJECT"] || 'N/A'}</p>
+          <p><span class="label">Centre Name:</span> ${record["CENTRE NAME"] || "N/A"}</p>
+          <p><span class="label">Centre Code:</span> ${record["CENTRE CODE"] || 'N/A'}</p>
+          <p><span class="label">Centre Address:</span> ${record["CENTRE ADDRESS"] || 'N/A'}</p>
+          ${modifySection}
         `;
       } catch (error) {
-        alert("Error fetching data. Try again later.");
-        console.error(error);
+        console.error("Fetch error:", error);
+        alert("Could not fetch data. Please check your connection or script ID.");
       }
     }
   </script>
