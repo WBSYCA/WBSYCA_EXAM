@@ -125,6 +125,27 @@
     alert("❌ Failed to approve. Please try again.");
   });
 }
+   function submitModification(formData) {
+  const url = 'https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec';
+  
+  fetch(url, {
+    method: 'POST',
+    body: new URLSearchParams(formData)
+  })
+  .then(res => res.text())
+  .then(response => {
+    if (response === "MODIFIED") {
+      alert("✅ Data modified successfully!");
+    } else {
+      alert("❌ " + response);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Failed to submit. Please try again.");
+  });
+}
+
   </script>
 </body>
 </html>
