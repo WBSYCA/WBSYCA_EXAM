@@ -105,44 +105,35 @@
       }
     }
 
-    async function approveWithoutModification(rollNo) {
-  const url = 'https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec';
+    function approveWithoutModify(dataObj) {
+  const scriptURL = 'https://script.google.com/macros/s/YOUR_DEPLOYED_WEBAPP_URL/exec';
 
-  fetch(url, {
-    method: 'POST',
-    body: new URLSearchParams({ rollNo: rollNo })
-  })
-  .then(res => res.text())
-  .then(response => {
-    if (response === "Approved") {
-      alert("✅ Approved successfully!");
-    } else {
-      alert("❌ " + response);
+  // Build formData from the dataObj
+  const formData = new URLSearchParams();
+  for (const key in dataObj) {
+    if (dataObj.hasOwnProperty(key)) {
+      formData.append(key, (dataObj[key] || "").toString().toUpperCase());
     }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("❌ Failed to approve. Please try again.");
-  });
-}
-   function submitModification(formData) {
-  const url = 'https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec';
-  
-  fetch(url, {
-    method: 'POST',
-    body: new URLSearchParams(formData)
+  }
+
+  // Set STATUS = MODIFIED
+  formData.set("STATUS", "MODIFIED");
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: formData
   })
   .then(res => res.text())
   .then(response => {
     if (response === "MODIFIED") {
-      alert("✅ Data modified successfully!");
+      alert("✅ Approved and updated successfully!");
     } else {
-      alert("❌ " + response);
+      alert("❌ Failed to approve. Server says: " + response);
     }
   })
-  .catch(err => {
-    console.error(err);
-    alert("❌ Failed to submit. Please try again.");
+  .catch(error => {
+    console.error("Error approving:", error);
+    alert("❌ Failed to approve. Please try again.");
   });
 }
 
