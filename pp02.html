@@ -105,24 +105,26 @@
       }
     }
 
-    async function approveWithoutChanges(rollNo) {
-      const confirmAction = confirm("Are you sure you want to approve your data without making any changes?");
-      if (!confirmAction) return;
+    async function approveWithoutModification(rollNo) {
+  const url = 'https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec';
 
-      try {
-        await fetch("https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ roll: rollNo })
-        });
-
-        alert("✅ Your registration has been marked as MODIFIED.");
-        document.getElementById("result").style.display = "none";
-      } catch (err) {
-        console.error("Approve error:", err);
-        alert("❌ Failed to approve. Please try again.");
-      }
+  fetch(url, {
+    method: 'POST',
+    body: new URLSearchParams({ rollNo: rollNo })
+  })
+  .then(res => res.text())
+  .then(response => {
+    if (response === "Approved") {
+      alert("✅ Approved successfully!");
+    } else {
+      alert("❌ " + response);
     }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Failed to approve. Please try again.");
+  });
+}
   </script>
 </body>
 </html>
