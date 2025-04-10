@@ -46,7 +46,7 @@
       const query = document.getElementById("searchInput").value.trim().toUpperCase();
       if (!query) return alert("Please enter a Roll No.");
 
-      const url = "https://script.google.com/macros/s/AKfycby0NBD7KJ_918gE9jsGksE0crOk1BF79Am4vKcKpxwBJTx3mlwhwh34Jq3urQuw-PPC/exec?query=" + encodeURIComponent(query);
+      const url = "https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec?query=" + encodeURIComponent(query);
 
       try {
         const res = await fetch(url);
@@ -110,7 +110,7 @@
       if (!confirmAction) return;
 
       try {
-        await fetch("https://script.google.com/macros/s/AKfycby0NBD7KJ_918gE9jsGksE0crOk1BF79Am4vKcKpxwBJTx3mlwhwh34Jq3urQuw-PPC/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ roll: rollNo })
