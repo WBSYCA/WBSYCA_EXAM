@@ -42,7 +42,7 @@
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
 
-    const url = "https://script.google.com/macros/s/AKfycbwYiEcA07ffCsiV5prZ5XyFkU5Hrczia7wQH1WbffqjYYt4QU4g3wyO_a57J_qw8wzYrQ/exec?query=" + encodeURIComponent(query);
+    const url = "https://script.google.com/macros/s/AKfycby4hKsc2svkK8oqrLaD9WabkTGrJZnXupCZVk5SVGDy-Gg2kUtOCd2N7KQ4OPwMlqTg/exec?query=" + encodeURIComponent(query);
 
     try {
       const res = await fetch(url);
@@ -102,7 +102,7 @@
   }
 
   async function approve(rollNo) {
-    const url = "https://script.google.com/macros/s/AKfycbwYiEcA07ffCsiV5prZ5XyFkU5Hrczia7wQH1WbffqjYYt4QU4g3wyO_a57J_qw8wzYrQ/exec";
+    const url = "https://script.google.com/macros/s/AKfycby4hKsc2svkK8oqrLaD9WabkTGrJZnXupCZVk5SVGDy-Gg2kUtOCd2N7KQ4OPwMlqTg/exec";
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
