@@ -4,13 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Registration Form PP-02</title>
-   <link rel="icon" type="image/png" href="wbsyca_logo.png">
-<style>
-  input[type="text"], textarea {
-    text-transform: uppercase;
-  }
-</style>
-<style>
+  <link rel="icon" type="image/png" href="wbsyca_logo.png">
+  <style>
+    input[type="text"], textarea { text-transform: uppercase; }
     body { font-family: Arial; background: #f4f4f4; padding: 20px; text-align: center; }
     header img { max-width: 100%; height: auto; }
     input[type="text"] {
@@ -30,62 +26,62 @@
 </head>
 <body>
 
-  <header>
-    <img src="https://i.postimg.cc/vHvCqdhG/header.jpg" alt="Header" />
-    <h1>Welcome to Student Registration Portal</h1>
-  </header>
+<header>
+  <img src="https://i.postimg.cc/vHvCqdhG/header.jpg" alt="Header" />
+  <h1>Welcome to Student Registration Portal</h1>
+</header>
 
-  <h2>Search Your Registration Details (PP-02)</h2>
-  <input type="text" id="searchInput" placeholder="Enter Roll No" />
-  <button onclick="searchData()">Search</button>
+<h2>Search Your Registration Details (PP-02)</h2>
+<input type="text" id="searchInput" placeholder="Enter Roll No" />
+<button onclick="searchData()">Search</button>
 
-  <div id="result" style="display: none;"></div>
+<div id="result" style="display: none;"></div>
 
-  <script>
-    async function searchData() {
-      const query = document.getElementById("searchInput").value.trim().toUpperCase();
-      if (!query) return alert("Please enter a Roll No.");
+<script>
+  async function searchData() {
+    const query = document.getElementById("searchInput").value.trim().toUpperCase();
+    if (!query) return alert("Please enter a Roll No.");
 
-      const url = "https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec?query=" + encodeURIComponent(query);
+    const url = "https://script.google.com/macros/s/AKfycbwYiEcA07ffCsiV5prZ5XyFkU5Hrczia7wQH1WbffqjYYt4QU4g3wyO_a57J_qw8wzYrQ/exec?query=" + encodeURIComponent(query);
 
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        const record = data[0];
-        if (!record) return alert("No matching record found.");
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const record = data[0];
+      if (!record) return alert("No matching record found.");
 
-        const dob = new Date(record["DATE OF BIRTH"]);
-        const dobDay = dob.getDate();
-        const dobMonth = dob.getMonth() + 1;
-        const dobYear = dob.getFullYear();
+      const dob = new Date(record["DATE OF BIRTH"]);
+      const dobDay = dob.getDate();
+      const dobMonth = dob.getMonth() + 1;
+      const dobYear = dob.getFullYear();
 
-        const formURL = "https://docs.google.com/forms/d/1jcCw4-TKI-RSAs8mSqVk6jxoPY3hTyBI7Pb0OKpSPWk/viewform?usp=pp_url" +
-          `&entry.916188020=${encodeURIComponent(record["REGISTRATION NO"])}` +
-          `&entry.1318237488=${encodeURIComponent(record["ROLL NO"])}` +
-          `&entry.1970136733=${encodeURIComponent(record["APPLICANT NAME"])}` +
-          `&entry.1915382959_day=${dobDay}` +
-          `&entry.1915382959_month=${dobMonth}` +
-          `&entry.1915382959_year=${dobYear}` +
-          `&entry.230391067=${encodeURIComponent(record["GUARDIAN NAME"])}` +
-          `&entry.2141508289=${encodeURIComponent(record["RELATION"])}` +
-          `&entry.91311027=${encodeURIComponent(record["CONTACT NO"])}` +
-          `&entry.949717326=${encodeURIComponent(record["SUBJECT"])}` +
-          `&entry.197254026=${encodeURIComponent(record["CENTRE NAME"])}` +
-          `&entry.312317850=${encodeURIComponent(record["CENTRE CODE"])}` +
-          `&entry.1273939207=${encodeURIComponent(record["CENTRE ADDRESS"])}`;
+      const formURL = "https://docs.google.com/forms/d/e/1jcCw4-TKI-RSAs8mSqVk6jxoPY3hTyBI7Pb0OKpSPWk/viewform?usp=pp_url" +
+        `&entry.916188020=${encodeURIComponent(record["REGISTRATION NO"])}` +
+        `&entry.1318237488=${encodeURIComponent(record["ROLL NO"])}` +
+        `&entry.1970136733=${encodeURIComponent(record["APPLICANT NAME"])}` +
+        `&entry.1915382959_day=${dobDay}` +
+        `&entry.1915382959_month=${dobMonth}` +
+        `&entry.1915382959_year=${dobYear}` +
+        `&entry.230391067=${encodeURIComponent(record["GUARDIAN NAME"])}` +
+        `&entry.2141508289=${encodeURIComponent(record["RELATION"])}` +
+        `&entry.91311027=${encodeURIComponent(record["CONTACT NO"])}` +
+        `&entry.949717326=${encodeURIComponent(record["SUBJECT"])}` +
+        `&entry.197254026=${encodeURIComponent(record["CENTRE NAME"])}` +
+        `&entry.312317850=${encodeURIComponent(record["CENTRE CODE"])}` +
+        `&entry.1273939207=${encodeURIComponent(record["CENTRE ADDRESS"])}`;
 
-        let buttons = "";
-        if ((record["STATUS"] || "").toUpperCase() === "MODIFIED") {
-          buttons = `<p style='color:red;'><b>You have already modified your registration once. Further changes are not allowed.</b></p>`;
-        } else {
-          buttons = `
-            <button onclick="window.location.href='${formURL}'">📝 Modify My Details</button>
-            <button onclick="approveWithoutChanges('${record["ROLL NO"]}')">✅ Approve Without Changes</button>
-          `;
-        }
+      let buttons = "";
+      if ((record["STATUS"] || "").toUpperCase() === "MODIFIED") {
+        buttons = `<p style='color:red;'><b>You have already modified your registration once. Further changes are not allowed.</b></p>`;
+      } else {
+        buttons = `
+          <button onclick="window.location.href='${formURL}'">📝 Modify My Details</button>
+          <button onclick="approve('${record["ROLL NO"]}')">✅ Approve Without Changes</button>
+        `;
+      }
 
-        document.getElementById("result").innerHTML = `
-          <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
+      document.getElementById("result").innerHTML = `
+           <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
           <p><span class="label">Roll No:</span> ${record["ROLL NO"] || "N/A"}</p>
           <p><span class="label">Registration No:</span> ${record["REGISTRATION NO"] || "N/A"}</p>
           <p><span class="label">DOB:</span> ${dobDay}/${dobMonth}/${dobYear}</p>
@@ -96,47 +92,30 @@
           <p><span class="label">Centre Name:</span> ${record["CENTRE NAME"] || "N/A"}</p>
           <p><span class="label">Centre Code:</span> ${record["CENTRE CODE"] || 'N/A'}</p>
           <p><span class="label">Centre Address:</span> ${record["CENTRE ADDRESS"] || 'N/A'}</p>
-          ${buttons}
-        `;
-        document.getElementById("result").style.display = "block";
-      } catch (err) {
-        alert("Error fetching data.");
-        console.error(err);
-      }
-    }
-
-    function approveWithoutModify(dataObj) {
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbwhqYsxsOuKUjeh2bMiKySYn1ChkHER35LI5vn78TLyUXt179f3QZvLNEMamh7W5xP6tw/exec';
-
-  // Build formData from the dataObj
-  const formData = new URLSearchParams();
-  for (const key in dataObj) {
-    if (dataObj.hasOwnProperty(key)) {
-      formData.append(key, (dataObj[key] || "").toString().toUpperCase());
+        ${buttons}
+      `;
+      document.getElementById("result").style.display = "block";
+    } catch (err) {
+      alert("Error fetching data.");
+      console.error(err);
     }
   }
 
-  // Set STATUS = MODIFIED
-  formData.set("STATUS", "MODIFIED");
-
-  fetch(scriptURL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.text())
-  .then(response => {
-    if (response === "MODIFIED") {
-      alert("✅ Approved and updated successfully!");
+  async function approve(rollNo) {
+    const url = "https://script.google.com/macros/s/AKfycbwYiEcA07ffCsiV5prZ5XyFkU5Hrczia7wQH1WbffqjYYt4QU4g3wyO_a57J_qw8wzYrQ/exec";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rollNo })
+    });
+    const result = await res.text();
+    if (result === "UPDATED") {
+      alert("✅ Your data was approved successfully.");
+      location.reload();
     } else {
-      alert("❌ Failed to approve. Server says: " + response);
+      alert("❌ Approval failed: " + result);
     }
-  })
-  .catch(error => {
-    console.error("Error approving:", error);
-    alert("❌ Failed to approve. Please try again.");
-  });
-}
-
-  </script>
+  }
+</script>
 </body>
 </html>
