@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Registration Form PP-02</title>
   <link rel="icon" type="image/png" href="wbsyca_logo.png">
+ <!DOCTYPE html>
   <style>
-    input[type="text"], textarea { text-transform: uppercase; }
     body { font-family: Arial; background: #f4f4f4; padding: 20px; text-align: center; }
+    input[type="text"], textarea { text-transform: uppercase; }
     header img { max-width: 100%; height: auto; }
-    input[type="text"] {
-      padding: 10px; width: 300px; font-size: 16px; text-transform: uppercase;
-    }
     button {
       padding: 10px 20px; margin: 10px; font-size: 16px;
       background-color: #007acc; color: white; border: none;
@@ -20,41 +18,33 @@
     #result {
       margin-top: 20px; background: #fff; padding: 20px;
       border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 600px; margin-left: auto; margin-right: auto; text-align: left;
+      max-width: 600px; margin: auto; text-align: left;
     }
   </style>
 </head>
 <body>
-
 <header>
   <img src="https://i.postimg.cc/vHvCqdhG/header.jpg" alt="Header" />
   <h1>Welcome to Student Registration Portal</h1>
 </header>
-
 <h2>Search Your Registration Details (PP-02)</h2>
 <input type="text" id="searchInput" placeholder="Enter Roll No" />
 <button onclick="searchData()">Search</button>
-
 <div id="result" style="display: none;"></div>
-
 <script>
   async function searchData() {
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
-
     const url = "https://script.google.com/macros/s/AKfycbxDMTP7enSqWTivwQC19nzaHUoAg-cX-WsbVLiJPRF-0NHztx8upVGl3wkkPexpjyxP/exec?query=" + encodeURIComponent(query);
-
     try {
       const res = await fetch(url);
       const data = await res.json();
       const record = data[0];
       if (!record) return alert("No matching record found.");
-
       const dob = new Date(record["DATE OF BIRTH"]);
       const dobDay = dob.getDate();
       const dobMonth = dob.getMonth() + 1;
       const dobYear = dob.getFullYear();
-
       const formURL = "https://docs.google.com/forms/d/e/1jcCw4-TKI-RSAs8mSqVk6jxoPY3hTyBI7Pb0OKpSPWk/viewform?usp=pp_url" +
         `&entry.916188020=${encodeURIComponent(record["REGISTRATION NO"])}` +
         `&entry.1318237488=${encodeURIComponent(record["ROLL NO"])}` +
@@ -69,19 +59,12 @@
         `&entry.197254026=${encodeURIComponent(record["CENTRE NAME"])}` +
         `&entry.312317850=${encodeURIComponent(record["CENTRE CODE"])}` +
         `&entry.1273939207=${encodeURIComponent(record["CENTRE ADDRESS"])}`;
-
-      let buttons = "";
-      if ((record["STATUS"] || "").toUpperCase() === "MODIFIED") {
-        buttons = `<p style='color:red;'><b>You have already modified your registration once. Further changes are not allowed.</b></p>`;
-      } else {
-        buttons = `
-          <button onclick="window.location.href='${formURL}'">📝 Modify My Details</button>
-          <button onclick="approve('${record["ROLL NO"]}')">✅ Approve Without Changes</button>
-        `;
-      }
-
+      const buttons = (record["STATUS"] || "").toUpperCase() === "MODIFIED"
+        ? "<p style='color:red;'><b>You have already modified your registration once. Further changes are not allowed.</b></p>"
+        : `<button onclick="window.location.href='${formURL}'">📝 Modify</button>
+           <button onclick="approve('${record["ROLL NO"]}')">✅ Approve Without Changes</button>`;
       document.getElementById("result").innerHTML = `
-           <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
+         <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
           <p><span class="label">Roll No:</span> ${record["ROLL NO"] || "N/A"}</p>
           <p><span class="label">Registration No:</span> ${record["REGISTRATION NO"] || "N/A"}</p>
           <p><span class="label">DOB:</span> ${dobDay}/${dobMonth}/${dobYear}</p>
@@ -106,14 +89,14 @@
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rollNo })
+      body: JSON.stringify({ rollNo: rollNo })
     });
     const result = await res.text();
     if (result === "UPDATED") {
-      alert("✅ Your data was approved successfully.");
+      alert("✅ Approved successfully.");
       location.reload();
     } else {
-      alert("❌ Approval failed: " + result);
+      alert("❌ Error: " + result);
     }
   }
 </script>
