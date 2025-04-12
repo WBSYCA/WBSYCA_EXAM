@@ -1,10 +1,9 @@
- <pp02.html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Registration Form PP-02</title>
-<link rel="icon" type="image/png" href="wbsyca_logo.png">
   <style>
     body { font-family: Arial; background: #f4f4f4; padding: 20px; text-align: center; }
     input[type="text"], textarea { text-transform: uppercase; }
@@ -31,11 +30,13 @@
 <button onclick="searchData()">Search</button>
 <div id="result" style="display: none;"></div>
 <script>
-   async function searchData() {
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBU6ma2oq_F8kpLhvvLbq5usdq41FIRE5NofomaTfZZMQoVVYN4hRpvP7nBKnQQu0/exec";
+
+  async function searchData() {
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
     try {
-      const res = await fetch(`${https://script.google.com/macros/s/AKfycbxBU6ma2oq_F8kpLhvvLbq5usdq41FIRE5NofomaTfZZMQoVVYN4hRpvP7nBKnQQu0/exec}?query=${encodeURIComponent(query)}`);
+      const res = await fetch(`${SCRIPT_URL}?query=${encodeURIComponent(query)}`);
       const data = await res.json();
       const record = data[0];
       if (!record) return alert("No matching record found.");
@@ -62,17 +63,12 @@
         : `<button onclick="window.location.href='${formURL}'">📝 Modify</button>
            <button onclick="approveWithoutChanges('${record["ROLL NO"]}')">✅ Approve Without Changes</button>`;
       document.getElementById("result").innerHTML = `
-          <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
-          <p><span class="label">Roll No:</span> ${record["ROLL NO"] || "N/A"}</p>
-          <p><span class="label">Registration No:</span> ${record["REGISTRATION NO"] || "N/A"}</p>
-          <p><span class="label">DOB:</span> ${dobDay}/${dobMonth}/${dobYear}</p>
-          <p><span class="label">Guardian Name:</span> ${record["GUARDIAN NAME"] || "N/A"}</p>
-          <p><span class="label">Relation:</span> ${record["RELATION"] || 'N/A'}</p>
-          <p><span class="label">Contact No:</span> ${record["CONTACT NO"] || 'N/A'}</p>
-          <p><span class="label">Subject:</span> ${record["SUBJECT"] || 'N/A'}</p>
-          <p><span class="label">Centre Name:</span> ${record["CENTRE NAME"] || "N/A"}</p>
-          <p><span class="label">Centre Code:</span> ${record["CENTRE CODE"] || 'N/A'}</p>
-          <p><span class="label">Centre Address:</span> ${record["CENTRE ADDRESS"] || 'N/A'}</p>
+        <p><b>Name:</b> ${record["APPLICANT NAME"]}</p>
+        <p><b>Roll No:</b> ${record["ROLL NO"]}</p>
+        <p><b>Registration No:</b> ${record["REGISTRATION NO"]}</p>
+        <p><b>DOB:</b> ${dobDay}/${dobMonth}/${dobYear}</p>
+        <p><b>Guardian Name:</b> ${record["GUARDIAN NAME"]}</p>
+        <p><b>Centre Name:</b> ${record["CENTRE NAME"]}</p>
         ${buttons}
       `;
       document.getElementById("result").style.display = "block";
