@@ -31,9 +31,7 @@
 <button onclick="searchData()">Search</button>
 <div id="result" style="display: none;"></div>
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBU6ma2oq_F8kpLhvvLbq5usdq41FIRE5NofomaTfZZMQoVVYN4hRpvP7nBKnQQu0/exec";
-
-  async function searchData() {
+   async function searchData() {
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
     try {
