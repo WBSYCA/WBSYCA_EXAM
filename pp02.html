@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Registration Form PP-02</title>
 <link rel="icon" type="image/png" href="wbsyca_logo.png">
- <style>
+  <style>
     body { font-family: Arial; background: #f4f4f4; padding: 20px; text-align: center; }
     input[type="text"], textarea { text-transform: uppercase; }
     header img { max-width: 100%; height: auto; }
@@ -31,12 +31,13 @@
 <button onclick="searchData()">Search</button>
 <div id="result" style="display: none;"></div>
 <script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxK_Lo2hFW7B7tEJyestKUW5L_o4EsHiKvOvs6dCjM7j_MsrDdsjx4DnVT7PsFzeAn/exec";
+
   async function searchData() {
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
-    const url = "https://script.google.com/macros/s/AKfycbxDMTP7enSqWTivwQC19nzaHUoAg-cX-WsbVLiJPRF-0NHztx8upVGl3wkkPexpjyxP/exec?query=" + encodeURIComponent(query);
     try {
-      const res = await fetch(url);
+      const res = await fetch(`${SCRIPT_URL}?query=${encodeURIComponent(query)}`);
       const data = await res.json();
       const record = data[0];
       if (!record) return alert("No matching record found.");
@@ -63,12 +64,17 @@
         : `<button onclick="window.location.href='${formURL}'">📝 Modify</button>
            <button onclick="approveWithoutChanges('${record["ROLL NO"]}')">✅ Approve Without Changes</button>`;
       document.getElementById("result").innerHTML = `
-        <p><b>Name:</b> ${record["APPLICANT NAME"]}</p>
-        <p><b>Roll No:</b> ${record["ROLL NO"]}</p>
-        <p><b>Registration No:</b> ${record["REGISTRATION NO"]}</p>
-        <p><b>DOB:</b> ${dobDay}/${dobMonth}/${dobYear}</p>
-        <p><b>Guardian Name:</b> ${record["GUARDIAN NAME"]}</p>
-        <p><b>Centre Name:</b> ${record["CENTRE NAME"]}</p>
+          <p><span class="label">Name:</span> ${record["APPLICANT NAME"] || "N/A"}</p>
+          <p><span class="label">Roll No:</span> ${record["ROLL NO"] || "N/A"}</p>
+          <p><span class="label">Registration No:</span> ${record["REGISTRATION NO"] || "N/A"}</p>
+          <p><span class="label">DOB:</span> ${dobDay}/${dobMonth}/${dobYear}</p>
+          <p><span class="label">Guardian Name:</span> ${record["GUARDIAN NAME"] || "N/A"}</p>
+          <p><span class="label">Relation:</span> ${record["RELATION"] || 'N/A'}</p>
+          <p><span class="label">Contact No:</span> ${record["CONTACT NO"] || 'N/A'}</p>
+          <p><span class="label">Subject:</span> ${record["SUBJECT"] || 'N/A'}</p>
+          <p><span class="label">Centre Name:</span> ${record["CENTRE NAME"] || "N/A"}</p>
+          <p><span class="label">Centre Code:</span> ${record["CENTRE CODE"] || 'N/A'}</p>
+          <p><span class="label">Centre Address:</span> ${record["CENTRE ADDRESS"] || 'N/A'}</p>
         ${buttons}
       `;
       document.getElementById("result").style.display = "block";
@@ -78,30 +84,26 @@
     }
   }
 
- async function approveWithoutChanges(rollNo) {
-  const confirmAction = confirm("Are you sure you want to approve your data without making any changes?");
-  if (!confirmAction) return;
-
-  try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbxDMTP7enSqWTivwQC19nzaHUoAg-cX-WsbVLiJPRF-0NHztx8upVGl3wkkPexpjyxP/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roll: rollNo })
-    });
-
-    const result = await res.text();
-    if (result === "UPDATED") {
-      alert("✅ Approved successfully!");
-      location.reload();
-    } else {
-      alert("❌ Failed: " + result);
+  async function approveWithoutChanges(rollNo) {
+    if (!confirm("Are you sure you want to approve your data without changes?")) return;
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roll: rollNo })
+      });
+      const result = await res.text();
+      if (result === "UPDATED") {
+        alert("✅ Approved successfully!");
+        location.reload();
+      } else {
+        alert("❌ Failed: " + result);
+      }
+    } catch (err) {
+      alert("❌ Error approving.");
+      console.error(err);
     }
-  } catch (err) {
-    console.error("Approve error:", err);
-    alert("❌ Failed to approve. Please try again.");
   }
-}
-
 </script>
 </body>
 </html>
