@@ -77,27 +77,27 @@
       console.error(err);
     }
   }
-
-  async function approveWithoutChanges(rollNo) {
-    if (!confirm("Are you sure you want to approve your data without changes?")) return;
-    try {
-      const res = await fetch(https://script.google.com/macros/s/AKfycbxBU6ma2oq_F8kpLhvvLbq5usdq41FIRE5NofomaTfZZMQoVVYN4hRpvP7nBKnQQu0/exec, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ roll: rollNo })
-      });
-      const result = await res.text();
-      if (result === "UPDATED") {
-        alert("✅ Approved successfully!");
-        location.reload();
-      } else {
-        alert("❌ Failed: " + result);
-      }
-    } catch (err) {
-      alert("❌ Error approving.");
-      console.error(err);
+ async function approveWithoutChanges(rollNo) {
+  if (!confirm("Are you sure you want to approve your data without changes?")) return;
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbxBU6ma2oq_F8kpLhvvLbq5usdq41FIRE5NofomaTfZZMQoVVYN4hRpvP7nBKnQQu0/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ roll: rollNo })
+    });
+    const result = await res.text();
+    if (result === "UPDATED") {
+      alert("✅ Approved successfully!");
+      location.reload();
+    } else {
+      alert("❌ Failed: " + result);
     }
+  } catch (err) {
+    alert("❌ Error approving.");
+    console.error(err);
   }
+}
+
 </script>
 </body>
 </html>
