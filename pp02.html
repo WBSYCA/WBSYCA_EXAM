@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="wbsyca_logo.png">
   <title>Student Registration Form PP-02</title>
   <style>
     body { font-family: Arial; background: #f4f4f4; padding: 20px; text-align: center; }
@@ -30,22 +31,20 @@
 <button onclick="searchData()">Search</button>
 <div id="result" style="display: none;"></div>
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0GIIQX4w2OdFnkH6XZwLN0GPlDTd03ibqQpIzcgAuEgnu7oa_OW0XTNZkFuqovwwo4w/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCKYd_bcu8mBA_PfZFgEnTe8jBE9ACwXBA_l72e0yNPjXuWuivw3WrCSSeeTxChXGb/exec";
 
   async function searchData() {
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
     try {
-      const res = await fetch(`${"https://script.google.com/macros/s/AKfycbz0GIIQX4w2OdFnkH6XZwLN0GPlDTd03ibqQpIzcgAuEgnu7oa_OW0XTNZkFuqovwwo4w/exec"}?query=${encodeURIComponent(query)}`);
+      const res = await fetch(`${SCRIPT_URL}?query=${encodeURIComponent(query)}`);
       const data = await res.json();
       const record = data[0];
       if (!record) return alert("No matching record found.");
-
       const dob = new Date(record["DATE OF BIRTH"]);
       const dobDay = dob.getDate();
       const dobMonth = dob.getMonth() + 1;
       const dobYear = dob.getFullYear();
-
       const formURL = "https://docs.google.com/forms/d/1jcCw4-TKI-RSAs8mSqVk6jxoPY3hTyBI7Pb0OKpSPWk/viewform?usp=pp_url" +
         `&entry.916188020=${encodeURIComponent(record["REGISTRATION NO"])}` +
         `&entry.1318237488=${encodeURIComponent(record["ROLL NO"])}` +
@@ -60,12 +59,10 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0GIIQX4w2OdFnkH6XZ
         `&entry.197254026=${encodeURIComponent(record["CENTRE NAME"])}` +
         `&entry.312317850=${encodeURIComponent(record["CENTRE CODE"])}` +
         `&entry.1273939207=${encodeURIComponent(record["CENTRE ADDRESS"])}`;
-
       const buttons = (record["STATUS"] || "").toUpperCase() === "MODIFIED"
         ? "<p style='color:red;'><b>You have already modified your registration once. Further changes are not allowed.</b></p>"
         : `<button onclick="window.location.href='${formURL}'">📝 Modify</button>
            <button onclick="approveWithoutChanges('${record["ROLL NO"]}')">✅ Approve Without Changes</button>`;
-
       document.getElementById("result").innerHTML = `
         <p><b>Name:</b> ${record["APPLICANT NAME"]}</p>
         <p><b>Roll No:</b> ${record["ROLL NO"]}</p>
@@ -85,7 +82,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0GIIQX4w2OdFnkH6XZ
   async function approveWithoutChanges(rollNo) {
     if (!confirm("Are you sure you want to approve your data without changes?")) return;
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbz0GIIQX4w2OdFnkH6XZwLN0GPlDTd03ibqQpIzcgAuEgnu7oa_OW0XTNZkFuqovwwo4w/exec", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbzCKYd_bcu8mBA_PfZFgEnTe8jBE9ACwXBA_l72e0yNPjXuWuivw3WrCSSeeTxChXGb/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ roll: rollNo })
