@@ -37,7 +37,7 @@
     const query = document.getElementById("searchInput").value.trim().toUpperCase();
     if (!query) return alert("Please enter a Roll No.");
     try {
-      const res = await fetch(`${SCRIPT_URL}?query=${encodeURIComponent(query)}`);
+      const res = await fetch(`${"https://script.google.com/macros/s/AKfycbzCKYd_bcu8mBA_PfZFgEnTe8jBE9ACwXBA_l72e0yNPjXuWuivw3WrCSSeeTxChXGb/exec"}?query=${encodeURIComponent(query)}`);
       const data = await res.json();
       const record = data[0];
       if (!record) return alert("No matching record found.");
